@@ -1,50 +1,56 @@
 package itmo.isit.clwnyeti.mobilelabsproject
 
+import android.Manifest
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import itmo.isit.clwnyeti.mobilelabsproject.logic.ContactsViewModel
+import itmo.isit.clwnyeti.mobilelabsproject.logic.tryToRefreshContacts
+import itmo.isit.clwnyeti.mobilelabsproject.ui.components.contacts.ContactsSection
+import itmo.isit.clwnyeti.mobilelabsproject.ui.components.contacts.EmptyContactSection
 import itmo.isit.clwnyeti.mobilelabsproject.ui.theme.MobileLabsProjectTheme
 
 class MainActivity : ComponentActivity() {
+    private val contractsVM: ContactsViewModel by viewModels()
+
+    private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        if (it) {
+            contractsVM.canRead.value = true
+            contractsVM.refreshContacts(this)
+        } else {
+            contractsVM.userDeclinedPermissionRequest.value = true
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        tryToRefreshContacts(contractsVM)
         enableEdgeToEdge()
         setContent {
             MobileLabsProjectTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    Row(modifier = Modifier.padding(innerPadding)) {
+                        if (contractsVM.canRead.value) {
+                            ContactsSection(contractsVM)
+                        } else {
+                            EmptyContactSection(
+                                contractsVM.userDeclinedPermissionRequest,
+                                modifier = Modifier.fillMaxSize()) {
+                                permissionLauncher.launch(Manifest.permission.READ_CONTACTS)
+                                tryToRefreshContacts(contractsVM)
+                            }
+                        }
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MobileLabsProjectTheme {
-        Greeting("Android")
     }
 }
