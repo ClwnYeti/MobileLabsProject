@@ -2,4 +2,7 @@
     <string name="app_name">MobileLabsProject</string>
     <string name="ask_permission_button_text_ru">Запросить доступ к контактам</string>
     <string name="cannot_work_without_permission_ru">Приложение не работает без необходимых разрешений</string>
+    <string name="contact_photo">Фото контакта</string>
+    <string name="contact_info">contact_info</string>
+    <string name="contacts_info">contacts_info</string>
 </resources>

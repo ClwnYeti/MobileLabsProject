@@ -4,9 +4,10 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.graphics.BitmapFactory.decodeByteArray
 import android.provider.ContactsContract
-import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.runtime.MutableState
+import androidx.core.database.getBlobOrNull
 import androidx.core.database.getStringOrNull
 
 fun Context.checkContactReadPermission(canReadContacts: MutableState<Boolean>) {
@@ -31,8 +32,17 @@ fun Context.fetchAllContacts(): List<Contact> {
                         cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
                     val phoneNumber =
                         cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                    val photoByteArray =
+                        cursor.getBlobOrNull(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Photo.PHOTO))
+                    val email =
+                        cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS))
 
-                    add(Contact(name, phoneNumber))
+                    add(Contact(
+                        name ?: "Null name",
+                        phoneNumber ?: "Null phone",
+                        email ?: "Null email",
+                        if (photoByteArray != null) decodeByteArray(photoByteArray, 0, photoByteArray.size)
+                        else null))
                 }
             }
         }
