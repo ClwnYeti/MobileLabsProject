@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">MobileLabsProject</string>
+    <string name="username_form">Имя пользователя</string>
+    <string name="password_form">Пароль</string>
+    <string name="username">username</string>
+    <string name="token">token</string>
+    <string name="auth_preferences">auth_preferences</string>
+    <string name="log_in">Войти</string>
+    <string name="log_in_error">Произошла ошибка %s: %s</string>
+    <string name="auth_title">Авторизация</string>
+    <string name="channels_title">Каналы</string>
+    <string name="empty_channels">Нет каналов</string>
+    <string name="empty_messages">Нет сообщений</string>
+    <string name="empty_message">Пустое сообщение</string>
+    <string name="close">Закрыть</string>
 </resources>
