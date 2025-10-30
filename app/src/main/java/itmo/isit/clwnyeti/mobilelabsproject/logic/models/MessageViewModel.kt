@@ -48,13 +48,6 @@ class MessageViewModel @Inject constructor(
 
 
     init {
-        viewModelScope.launch {
-            online.collect { isOnline ->
-                if (isOnline) {
-                    refresh()
-                }
-            }
-        }
         viewModelScope.launch { refresh() }
     }
 
@@ -101,6 +94,8 @@ class MessageViewModel @Inject constructor(
 
     fun loadMore() = viewModelScope.launch {
         if (loadingMore) return@launch
+        val isOnline = online.value
+        if (!isOnline) return@launch
         val current = messages.value
         val oldest = current.minByOrNull { it.serverId }
         loadingMore = true

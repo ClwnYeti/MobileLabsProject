@@ -12,7 +12,7 @@ interface MessageDao {
     @Query("SELECT * FROM messages WHERE `to` = :channel ORDER BY serverId DESC")
     fun observeMessages(channel: String): Flow<List<MessageEntity>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(messages: List<MessageEntity>)
 
     @Query("DELETE FROM messages")
