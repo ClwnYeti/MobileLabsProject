@@ -27,7 +27,7 @@ class NetworkMonitor @Inject constructor(
         awaitClose { cm.unregisterNetworkCallback(cb) }
     }.distinctUntilChanged()
 
-    private fun isCurrentlyOnline(): Boolean =
+    fun isCurrentlyOnline(): Boolean =
         cm.activeNetwork?.let { n ->
             cm.getNetworkCapabilities(n)?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
         } == true

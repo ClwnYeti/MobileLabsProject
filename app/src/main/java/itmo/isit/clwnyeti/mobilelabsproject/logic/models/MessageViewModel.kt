@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -36,7 +37,7 @@ class MessageViewModel @Inject constructor(
         ?: error("Missing 'channel' argument")
 
     val online: StateFlow<Boolean> = networkMonitor.isOnline
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), networkMonitor.isCurrentlyOnline())
 
     private val _ui = MutableStateFlow(UIState())
     val ui: StateFlow<UIState> = _ui.asStateFlow()
@@ -48,14 +49,17 @@ class MessageViewModel @Inject constructor(
 
 
     init {
-        viewModelScope.launch { refresh() }
+        viewModelScope.launch {
+            online.collectLatest { isOnline ->
+                if (isOnline) {
+                    refresh()
+                }
+            }
+        }
     }
 
     fun sendText(text: String) = viewModelScope.launch {
         if (text.isBlank()) return@launch
-        if (!online.value) {
-            return@launch
-        }
         val token = tokenStore.getToken()
         val user = tokenStore.getUserName()
         if (token.isNullOrBlank() || user.isNullOrBlank()) {
@@ -73,8 +77,6 @@ class MessageViewModel @Inject constructor(
     }
 
     fun refresh() = viewModelScope.launch {
-        val isOnline = online.value
-        if (!isOnline) return@launch
         val token = tokenStore.getToken()
         if (token.isNullOrBlank()) {
             return@launch
@@ -93,9 +95,9 @@ class MessageViewModel @Inject constructor(
     }
 
     fun loadMore() = viewModelScope.launch {
-        if (loadingMore) return@launch
-        val isOnline = online.value
-        if (!isOnline) return@launch
+        if (loadingMore) {
+            return@launch
+        }
         val current = messages.value
         val oldest = current.minByOrNull { it.serverId }
         loadingMore = true

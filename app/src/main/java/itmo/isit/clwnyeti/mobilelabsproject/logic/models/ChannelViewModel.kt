@@ -9,8 +9,8 @@ import itmo.isit.clwnyeti.mobilelabsproject.logic.repositories.ChannelRepository
 import itmo.isit.clwnyeti.mobilelabsproject.logic.repositories.TokenRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,6 +28,8 @@ class ChannelViewModel @Inject constructor(
     )
 
     private val onlineFlow = network.isOnline
+    private val online: StateFlow<Boolean> = onlineFlow
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), network.isCurrentlyOnline())
     private val channelsFlow = repo.observeChannels()
 
     val ui: StateFlow<UiState> = combine(
@@ -39,10 +41,11 @@ class ChannelViewModel @Inject constructor(
 
 
     init {
-        refresh()
         viewModelScope.launch {
-            onlineFlow.drop(1).collect { on ->
-                if (on) refresh()
+            online.collectLatest { isOnline ->
+                if (isOnline) {
+                    refresh()
+                }
             }
         }
     }
