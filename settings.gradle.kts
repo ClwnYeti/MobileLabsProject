@@ -12,8 +12,7 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
-    // semgrep-ignore-next-line: fail-on-project-repos-is-set
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+//    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
