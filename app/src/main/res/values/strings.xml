@@ -3,7 +3,6 @@
     <string name="contact_info" translatable="false">contact_info</string>
     <string name="contacts_info" translatable="false">contacts_info</string>
     <string name="no_contacts">No contacts found</string>
-    <string name="ask_permission_button_text">Request access to contacts</string>
+    <string name="contacts_count">Found %1$d contacts</string>
     <string name="cannot_work_without_permission">The app doesn’t work without the necessary permissions.</string>
-    <string name="contact_photo">Photo of the contact</string>
 </resources>

@@ -1,9 +1,11 @@
 package itmo.isit.clwnyeti.mobilelabsproject.ui.components.contacts
 
 import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
@@ -15,20 +17,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import itmo.isit.clwnyeti.mobilelabsproject.R
-import itmo.isit.clwnyeti.mobilelabsproject.activities.ContactActivity
 import itmo.isit.clwnyeti.mobilelabsproject.logic.ContactsViewModel
-import itmo.isit.clwnyeti.mobilelabsproject.logic.ContactsWrapper
 import itmo.isit.clwnyeti.mobilelabsproject.ui.theme.PurpleGrey40
+import androidx.core.net.toUri
 
 @Composable
 fun ContactsSection(
     contactVM: ContactsViewModel,
     modifier: Modifier = Modifier
 ) {
-
     val context = LocalContext.current
-    val keyValueContact = stringResource(R.string.contact_info)
-    val keyValueContacts = stringResource(R.string.contacts_info)
     if (contactVM.items.count() == 0) {
         Column(
             modifier = modifier
@@ -43,19 +41,26 @@ fun ContactsSection(
             )
         }
     } else {
-        LazyColumn(
+        Row(
             modifier = modifier
-                .fillMaxSize()
-                .background(PurpleGrey40),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxSize(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            items(contactVM.items) { item ->
-                ContactPreview(item) { item ->
-                    val intent = Intent(context, ContactActivity::class.java)
-                    intent.putExtra(keyValueContact, item)
-                    intent.putExtra(keyValueContacts, ContactsWrapper(contactVM.items.toTypedArray()))
-                    context.startActivity(intent)
+            LazyColumn(
+                modifier = modifier
+                    .fillMaxSize()
+                    .background(PurpleGrey40),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                item { Text(stringResource(id = R.string.contacts_count, contactVM.items.count())) }
+
+                items(contactVM.items) { item ->
+                    ContactPreview(item) { item ->
+                        val intent = Intent( Intent.ACTION_DIAL, "tel:${item.phone}".toUri() )
+                        context.startActivity(intent)
+                    }
                 }
             }
         }

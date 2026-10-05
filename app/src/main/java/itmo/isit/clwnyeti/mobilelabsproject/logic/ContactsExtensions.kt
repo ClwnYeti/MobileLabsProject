@@ -32,17 +32,13 @@ fun Context.fetchAllContacts(): List<Contact> {
                         cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
                     val phoneNumber =
                         cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                    val photoByteArray =
-                        cursor.getBlobOrNull(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Photo.PHOTO))
                     val email =
                         cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS))
 
                     add(Contact(
                         name ?: "Null name",
                         phoneNumber ?: "Null phone",
-                        email ?: "Null email",
-                        if (photoByteArray != null) decodeByteArray(photoByteArray, 0, photoByteArray.size)
-                        else null))
+                        email ?: "Null email"))
                 }
             }
         }

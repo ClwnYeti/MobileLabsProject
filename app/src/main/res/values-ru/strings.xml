@@ -1,6 +1,5 @@
 <resources>
     <string name="no_contacts">Контакты не найдены</string>
-    <string name="ask_permission_button_text">Запросить доступ к контактам</string>
+    <string name="contacts_count">Найдено %1$d контактов</string>
     <string name="cannot_work_without_permission">Приложение не работает без необходимых разрешений</string>
-    <string name="contact_photo">Фото контакта</string>
 </resources>
