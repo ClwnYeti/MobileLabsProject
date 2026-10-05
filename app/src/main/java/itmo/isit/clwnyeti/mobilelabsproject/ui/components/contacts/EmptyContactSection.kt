@@ -30,12 +30,12 @@ fun EmptyContactSection(
     ) {
         if (!userDeclinedPermissionRequest.value) {
             Button(askPermissionLogic) {
-                Text(stringResource(R.string.ask_permission_button_text_ru))
+                Text(stringResource(R.string.ask_permission_button_text))
             }
         } else {
             Text(
                 textAlign = TextAlign.Center,
-                text = stringResource(R.string.cannot_work_without_permission_ru))
+                text = stringResource(R.string.cannot_work_without_permission))
         }
     }
 
