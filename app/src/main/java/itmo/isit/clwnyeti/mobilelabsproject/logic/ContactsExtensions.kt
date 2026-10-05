@@ -2,15 +2,14 @@ package itmo.isit.clwnyeti.mobilelabsproject.logic
 
 import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.database.Cursor
 import android.provider.ContactsContract
 import androidx.compose.runtime.MutableState
 import androidx.core.database.getStringOrNull
 
 fun Context.checkContactReadPermission(canReadContacts: MutableState<Boolean>) {
-    canReadContacts.value = checkSelfPermission(Manifest.permission.READ_CONTACTS) ==
-            PackageManager.PERMISSION_GRANTED;
+    canReadContacts.value = checkSelfPermission(Manifest.permission.READ_CONTACTS) == PERMISSION_GRANTED
 }
 
 fun Context.tryToRefreshContacts(contractsVM: ContactsViewModel) {
