@@ -1,7 +1,6 @@
 package itmo.isit.clwnyeti.mobilelabsproject.ui.components.contacts
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,7 +26,7 @@ fun ContactsSection(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    if (contactVM.items.count() == 0) {
+    if (contactVM.items.isEmpty()) {
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -54,12 +53,16 @@ fun ContactsSection(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                item { Text(stringResource(id = R.string.contacts_count, contactVM.items.count())) }
+                item { Text(stringResource(id = R.string.contacts_count, contactVM.items.size)) }
 
                 items(contactVM.items) { item ->
                     ContactPreview(item) { item ->
-                        val intent = Intent( Intent.ACTION_DIAL, "tel:${item.phone}".toUri() )
-                        context.startActivity(intent)
+                        item.phone?.let { phone ->
+                            if (phone.isNotBlank()) {
+                                val intent = Intent(Intent.ACTION_DIAL, "tel:$phone".toUri())
+                                context.startActivity(intent)
+                            }
+                        }
                     }
                 }
             }

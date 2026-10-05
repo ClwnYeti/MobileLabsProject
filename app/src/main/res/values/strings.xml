@@ -5,4 +5,7 @@
     <string name="no_contacts">No contacts found</string>
     <string name="contacts_count">Found %1$d contacts</string>
     <string name="cannot_work_without_permission">The app doesn’t work without the necessary permissions.</string>
+    <string name="no_name">Null name.</string>
+    <string name="no_phone">Null phone.</string>
+    <string name="no_email">Null email.</string>
 </resources>

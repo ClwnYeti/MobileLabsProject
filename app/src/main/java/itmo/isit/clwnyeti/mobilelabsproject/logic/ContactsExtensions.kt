@@ -4,10 +4,8 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.database.Cursor
-import android.graphics.BitmapFactory.decodeByteArray
 import android.provider.ContactsContract
 import androidx.compose.runtime.MutableState
-import androidx.core.database.getBlobOrNull
 import androidx.core.database.getStringOrNull
 
 fun Context.checkContactReadPermission(canReadContacts: MutableState<Boolean>) {
@@ -36,9 +34,9 @@ fun Context.fetchAllContacts(): List<Contact> {
                         cursor.getStringOrNull(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS))
 
                     add(Contact(
-                        name ?: "Null name",
-                        phoneNumber ?: "Null phone",
-                        email ?: "Null email"))
+                        name,
+                        phoneNumber,
+                        email))
                 }
             }
         }

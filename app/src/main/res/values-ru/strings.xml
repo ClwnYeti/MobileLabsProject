@@ -2,4 +2,7 @@
     <string name="no_contacts">Контакты не найдены</string>
     <string name="contacts_count">Найдено %1$d контактов</string>
     <string name="cannot_work_without_permission">Приложение не работает без необходимых разрешений</string>
+    <string name="no_name">Пустое имя.</string>
+    <string name="no_phone">Пустой телефон.</string>
+    <string name="no_email">Пустой email.</string>
 </resources>

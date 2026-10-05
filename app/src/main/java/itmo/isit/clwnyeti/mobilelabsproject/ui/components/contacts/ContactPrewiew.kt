@@ -11,7 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import itmo.isit.clwnyeti.mobilelabsproject.R
 import itmo.isit.clwnyeti.mobilelabsproject.logic.Contact
 
 @Composable
@@ -41,11 +43,11 @@ fun ContactPreview(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(contact.name)
-                Text(contact.phone)
+                Text(text = contact.name ?: stringResource(id = R.string.no_name))
+                Text(contact.phone ?: stringResource(id = R.string.no_phone))
             }
 
-            Text(contact.email)
+            Text(contact.email ?: stringResource(id = R.string.no_email))
         }
     }
 }
